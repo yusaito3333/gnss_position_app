@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_gnss_app"
+    app:startDestination="@id/start_fragment">
+
+    <fragment
+        android:id="@+id/start_fragment"
+        android:name="com.example.gnsspositionapp.ui.StartFragment"
+        android:label="StartFragment" >
+
+        <action
+            android:id="@+id/start_to_measure"
+            app:destination="@id/measure_fragment"
+            app:enterAnim="@anim/slide_from_bottom"
+            app:exitAnim="@anim/slide_to_top"
+            app:popEnterAnim="@anim/slide_from_top"
+            app:popExitAnim="@anim/slide_to_bottom"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/measure_fragment"
+        android:name="com.example.gnsspositionapp.ui.MeasureFragment"
+        android:label="measureFragment"
+        >
+
+        <action
+            android:id="@+id/start_to_measure"
+            app:destination="@id/measure_fragment"
+            app:enterAnim="@anim/slide_from_bottom"
+            app:exitAnim="@anim/slide_to_top"
+            app:popEnterAnim="@anim/slide_from_top"
+            app:popExitAnim="@anim/slide_to_bottom"/>
+
+    </fragment>
+</navigation>

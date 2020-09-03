@@ -1,4 +1,4 @@
-package com.example.gnsspositionapp.ui
+package com.example.gnsspositionapp.ui.start
 
 import android.os.Bundle
 import android.view.LayoutInflater

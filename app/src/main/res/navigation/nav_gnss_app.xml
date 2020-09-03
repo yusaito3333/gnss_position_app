@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/start_fragment"
-        android:name="com.example.gnsspositionapp.ui.StartFragment"
+        android:name="com.example.gnsspositionapp.ui.start.StartFragment"
         android:label="StartFragment" >
 
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/measure_fragment"
-        android:name="com.example.gnsspositionapp.ui.MeasureFragment"
+        android:name="com.example.gnsspositionapp.ui.measure.MeasureFragment"
         android:label="measureFragment"
         >
 

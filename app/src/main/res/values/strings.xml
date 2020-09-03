@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">GnssPositionApp</string>
+
+    <string name="btn_navigate_to_measure">位置を測定する</string>
+
+    <string name="edit_txt_file_title_hint">ファイル名を入力してください</string>
+
+    <string name="loading_txt">測定中です</string>
 </resources>

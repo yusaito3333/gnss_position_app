@@ -25,6 +25,10 @@ android {
         }
     }
 
+    buildFeatures {
+        dataBinding = true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -66,5 +70,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:$location_service_version"
 
     implementation "com.google.android.material:material:$material_version"
+
+    implementation "com.jakewharton.threetenabp:threetenabp:$threeTen_version"
 
 }

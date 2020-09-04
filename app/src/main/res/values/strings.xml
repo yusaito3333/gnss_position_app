@@ -1,9 +1,19 @@
 <resources>
     <string name="app_name">GnssPositionApp</string>
 
+    <string name="app_title">Gnss\nPosition\nApp</string>
+    <string name="toolbar_start_title">スタート画面</string>
     <string name="btn_navigate_to_measure">位置を測定する</string>
-
-    <string name="edit_txt_file_title_hint">ファイル名を入力してください</string>
-
+    <string name="edit_txt_file_title_hint">位置名称を入力してください</string>
     <string name="loading_txt">測定中です</string>
+
+    <string name="toolbar_measure_title">測定画面</string>
+    <string name="tv_date">時刻: %1$s</string>
+    <string name="tv_longitude">経度: %1$s度</string>
+    <string name="tv_latitude">緯度: %1$s度</string>
+    <string name="tv_accuracy">精度: %1$s</string>
+    <string name="tv_diff">前回採取点との距離: %1$sm</string>
+    <string name="tv_again">もう一度測定する</string>
+    <string name="unit_convert">単位変換(m ⇔ yard)</string>
+    <string name="btn_save">保存</string>
 </resources>

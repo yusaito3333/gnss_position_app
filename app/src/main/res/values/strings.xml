@@ -16,4 +16,5 @@
     <string name="tv_again">もう一度測定する</string>
     <string name="unit_convert">単位変換(m ⇔ yard)</string>
     <string name="btn_save">保存</string>
+    <string name="btn_finish">測定終了</string>
 </resources>

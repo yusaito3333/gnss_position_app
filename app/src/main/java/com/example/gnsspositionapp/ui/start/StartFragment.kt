@@ -1,15 +1,30 @@
 package com.example.gnsspositionapp.ui.start
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.gnsspositionapp.R
 import kotlinx.android.synthetic.main.start_fragment.*
 
 class StartFragment : Fragment() {
+
+    companion object {
+        private val necessaryPermissions = listOf(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        private const val REQUEST_CODE = 1000
+    }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,6 +41,31 @@ class StartFragment : Fragment() {
         btn_to_measure.setOnClickListener{
             navigateToMeasureFragment()
         }
+
+        val deniedPermissions = permissionCheck()
+
+        if(deniedPermissions.isNotEmpty()) {
+            requestPermissions(deniedPermissions.toTypedArray(), REQUEST_CODE)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun permissionCheck() : List<String>{
+        val deniedPermissions = mutableListOf<String>()
+
+        for (permission in necessaryPermissions) {
+            if(ActivityCompat.checkSelfPermission(requireContext(),permission) != PackageManager.PERMISSION_GRANTED){
+                deniedPermissions.add(permission)
+            }
+        }
+        return deniedPermissions
     }
 
     private fun navigateToMeasureFragment() {

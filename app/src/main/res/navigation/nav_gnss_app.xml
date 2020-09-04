@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/start_fragment"
         android:name="com.example.gnsspositionapp.ui.start.StartFragment"
-        android:label="StartFragment" >
+        android:label="@string/toolbar_start_title" >
 
         <action
             android:id="@+id/start_to_measure"
@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/measure_fragment"
         android:name="com.example.gnsspositionapp.ui.measure.MeasureFragment"
-        android:label="measureFragment"
+        android:label="@string/toolbar_measure_title"
         >
 
         <action

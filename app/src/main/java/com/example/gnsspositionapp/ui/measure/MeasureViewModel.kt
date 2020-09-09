@@ -29,6 +29,10 @@ class MeasureViewModel
         FINISHED
     }
 
+    val saveFinishedEvent = MutableLiveData<Unit>()
+
+    val savingEvent = MutableLiveData<Unit>()
+
     val unitIsYard = MutableLiveData(false)
 
     val locationName = MutableLiveData("")
@@ -80,7 +84,13 @@ class MeasureViewModel
     fun saveLocations()  {
         viewModelScope.launch {
             saveLocationUseCase(notSavedLocations)
-                .collect { if (it is Result.Error ) Timber.e(it.exception) }
+                .collect {
+                    when(it){
+                        is Result.Success -> saveFinishedEvent.value = Unit
+                        is Result.Loading -> savingEvent.value = Unit
+                        is Result.Error -> Timber.e(it.exception)
+                    }
+                }
         }
     }
 

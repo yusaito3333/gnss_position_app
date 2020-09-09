@@ -82,4 +82,6 @@ dependencies {
     kapt "androidx.hilt:hilt-compiler:$hilt_viewmodel_version"
 
     implementation "com.jakewharton.timber:timber:$timber_version"
+
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$canary_version"
 }

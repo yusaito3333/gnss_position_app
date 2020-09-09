@@ -47,12 +47,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showSavingSnackBar() {
-        Snackbar.make(binding.root,"保存中です",Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(binding.root,getString(R.string.snack_bar_saving),Snackbar.LENGTH_INDEFINITE)
             .show()
     }
 
     private fun showSaveFinishedSnackBar() {
-        Snackbar.make(binding.root,"保存完了しました",Snackbar.LENGTH_SHORT)
+        Snackbar.make(binding.root,getString(R.string.snack_bar_save_finished),Snackbar.LENGTH_SHORT)
             .show()
     }
 

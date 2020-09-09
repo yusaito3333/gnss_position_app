@@ -9,16 +9,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.gnsspositionapp.R
-import com.example.gnsspositionapp.databinding.MeasureFragmentBinding
+import com.example.gnsspositionapp.databinding.MeasureMeasuringLayoutBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MeasureFragment : Fragment(),OnBackPressHandler {
 
-    private lateinit var adapter: LocationListAdapter
-
-    private lateinit var binding : MeasureFragmentBinding
+    private lateinit var binding : MeasureMeasuringLayoutBinding
 
     private val measureViewModel : MeasureViewModel by activityViewModels()
 
@@ -29,7 +29,7 @@ class MeasureFragment : Fragment(),OnBackPressHandler {
     ): View? {
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.measure_fragment,
+            R.layout.measure_measuring_layout,
             container,
             false
         )
@@ -39,51 +39,33 @@ class MeasureFragment : Fragment(),OnBackPressHandler {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = LocationListAdapter(measureViewModel.unitIsYard.value ?: false)
-
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 
-            finishedView.locationList.adapter = adapter
-
             viewModel = measureViewModel
 
-            loadingView.btnEnd.setOnClickListener {
+            btnEnd.setOnClickListener {
                 measureViewModel.finishMeasuringLocation()
-            }
-
-            finishedView.btnMeasureAgain.setOnClickListener {
-                measureViewModel.startMeasuringLocation()
-            }
-
-            finishedView.btnSave.setOnClickListener {
-                measureViewModel.saveLocations()
+                navigateToStartFragment()
+                Timber.d("${measureViewModel.locations.value}")
             }
         }
+    }
 
-        measureViewModel.locations.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-        }
-
-        measureViewModel.unitIsYard.observe(viewLifecycleOwner) {
-            adapter.convertUnit(it)
-        }
-
+    private fun navigateToStartFragment() {
+        findNavController().popBackStack()
     }
 
     override fun onBackPressed() : Boolean{
-        return if(measureViewModel.state.value == MeasureViewModel.MeasureState.MEASURING){
-            AlertDialog.Builder(requireContext())
-                .setMessage(resources.getString(R.string.dialog_desc))
-                .setPositiveButton(resources.getString(R.string.dialog_positive)) { _, _ ->
-                    measureViewModel.finishMeasuringLocation()
-                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_container).popBackStack()
-                }
-                .setNegativeButton(resources.getString(R.string.dialog_negative)) { _, _ -> }
-                .show()
-            true
-        }else{
-            false
-        }
+        AlertDialog.Builder(requireContext())
+            .setMessage(resources.getString(R.string.dialog_desc))
+            .setPositiveButton(resources.getString(R.string.dialog_positive)) { _, _ ->
+                measureViewModel.forceToFinishMeasuringLocation()
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_container).popBackStack()
+            }
+            .setNegativeButton(resources.getString(R.string.dialog_negative)) { _, _ -> }
+            .show()
+
+        return true
     }
 }

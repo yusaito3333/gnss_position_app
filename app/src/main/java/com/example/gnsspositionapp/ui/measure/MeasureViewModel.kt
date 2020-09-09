@@ -24,11 +24,6 @@ class MeasureViewModel
     private val saveLocationUseCase: SaveLocationUseCase
 ) : ViewModel() {
 
-    enum class MeasureState{
-        MEASURING,
-        FINISHED
-    }
-
     val saveFinishedEvent = MutableLiveData<Unit>()
 
     val savingEvent = MutableLiveData<Unit>()
@@ -36,8 +31,6 @@ class MeasureViewModel
     val unitIsYard = MutableLiveData(false)
 
     val locationName = MutableLiveData("")
-
-    val state = MutableLiveData(MeasureState.FINISHED)
 
     val locations = MutableLiveData<List<LocationInfo>>(listOf())
 
@@ -53,8 +46,6 @@ class MeasureViewModel
 
     fun startMeasuringLocation() {
 
-        changeState(MeasureState.MEASURING)
-
         measureJob?.cancel()
 
         measureJob = viewModelScope.launch {
@@ -68,15 +59,22 @@ class MeasureViewModel
                 }
         }
     }
+    //情報を更新せずに終了
+    fun forceToFinishMeasuringLocation() {
+        measureJob?.cancel()
+        init()
+    }
 
     fun finishMeasuringLocation() {
-        changeState(MeasureState.FINISHED)
         viewModelScope.launch {
 
-            measureJob?.cancelChildren()
+            //位置情報取得の終了
+            measureJob?.cancel()
 
+            //精度が最も高いものを選択
             calcMinAccuracy()
 
+            //採取数と採取した位置情報をクリア
             init()
         }
     }
@@ -113,16 +111,14 @@ class MeasureViewModel
             locations.postValue(locations.value?.plus(newInfo))
 
             notSavedLocations.add(newInfo)
+
+            Timber.d("$prevHorizontalAccuracy")
+            Timber.d("$minAccuracyInfo")
+            Timber.d("$newInfo")
+
+            //置き換え
+            prevHorizontalAccuracy = minAccuracyInfo
         }
-
-        Timber.d("${locations.value}")
-
-        //置き換え
-        prevHorizontalAccuracy = minAccuracyInfo
-    }
-
-    private fun changeState(state : MeasureState) {
-        this.state.value = state
     }
 
     private fun init() {

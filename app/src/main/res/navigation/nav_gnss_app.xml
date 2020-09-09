@@ -16,6 +16,15 @@
             app:exitAnim="@anim/slide_to_top"
             app:popEnterAnim="@anim/slide_from_top"
             app:popExitAnim="@anim/slide_to_bottom"/>
+
+        <action
+            android:id="@+id/start_to_list"
+            app:destination="@id/locationListFragment"
+            app:enterAnim="@anim/slide_from_bottom"
+            app:exitAnim="@anim/slide_to_top"
+            app:popEnterAnim="@anim/slide_from_top"
+            app:popExitAnim="@anim/slide_to_bottom"/>
+
     </fragment>
 
     <fragment
@@ -29,6 +38,20 @@
             app:destination="@id/measure_fragment"
             app:enterAnim="@anim/slide_from_bottom"
             app:exitAnim="@anim/slide_to_top"
+            app:popEnterAnim="@anim/slide_from_top"
+            app:popExitAnim="@anim/slide_to_bottom"/>
+
+    </fragment>
+    <fragment
+        android:id="@+id/locationListFragment"
+        android:name="com.example.gnsspositionapp.ui.list.LocationListFragment"
+        android:label="@string/toolbar_list_title" >
+
+
+        <action
+            android:id="@+id/location_to_measure"
+            app:destination="@id/measure_fragment"
+            app:popUpTo="@id/start_fragment"
             app:popEnterAnim="@anim/slide_from_top"
             app:popExitAnim="@anim/slide_to_bottom"/>
 

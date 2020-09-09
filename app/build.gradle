@@ -36,6 +36,9 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += [
+                "-Xopt-in=kotlin.RequiresOptIn"
+                ]
     }
 }
 
@@ -73,4 +76,10 @@ dependencies {
 
     implementation "com.jakewharton.threetenabp:threetenabp:$threeTen_version"
 
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodel_version"
+    kapt "androidx.hilt:hilt-compiler:$hilt_viewmodel_version"
+
+    implementation "com.jakewharton.timber:timber:$timber_version"
 }

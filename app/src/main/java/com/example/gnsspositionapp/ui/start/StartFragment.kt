@@ -51,7 +51,7 @@ class StartFragment : Fragment() {
         }
 
         btn_list.setOnClickListener {
-            navigateToMeasureFragment()
+            navigateToLocationListFragment()
         }
     }
 
@@ -76,5 +76,8 @@ class StartFragment : Fragment() {
 
     private fun navigateToMeasureFragment() {
         findNavController().navigate(R.id.start_to_measure)
+    }
+    private fun navigateToLocationListFragment(){
+        findNavController().navigate(R.id.start_to_list)
     }
 }

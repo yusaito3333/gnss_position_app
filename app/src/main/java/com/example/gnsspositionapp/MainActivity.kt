@@ -1,26 +1,39 @@
 package com.example.gnsspositionapp
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.example.gnsspositionapp.databinding.ActivityMainBinding
 import com.example.gnsspositionapp.ui.measure.MeasureViewModel
 import com.example.gnsspositionapp.ui.measure.OnBackPressHandler
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
-import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding : ActivityMainBinding
+
+    private val measureViewModel : MeasureViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
 
         setUpToolbar()
+
+        measureViewModel.savingEvent.observe(this){
+            showSavingSnackBar()
+        }
+
+        measureViewModel.saveFinishedEvent.observe(this){
+            showSaveFinishedSnackBar()
+        }
     }
 
     private fun setUpToolbar() {
@@ -30,7 +43,17 @@ class MainActivity : AppCompatActivity() {
 
         val appBarConf = AppBarConfiguration(setOf(R.id.measure_fragment,R.id.start_fragment))
 
-        toolbar.setupWithNavController(navController,appBarConf)
+        binding.toolbar.setupWithNavController(navController,appBarConf)
+    }
+
+    private fun showSavingSnackBar() {
+        Snackbar.make(binding.root,"保存中です",Snackbar.LENGTH_INDEFINITE)
+            .show()
+    }
+
+    private fun showSaveFinishedSnackBar() {
+        Snackbar.make(binding.root,"保存完了しました",Snackbar.LENGTH_SHORT)
+            .show()
     }
 
     override fun onBackPressed() {

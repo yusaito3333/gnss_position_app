@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">GnssPositionApp</string>
 
+    <string name="snack_bar_saving">保存中です</string>
+    <string name="snack_bar_save_finished">保存完了しました</string>
+
     <string name="app_title">Gnss\nPosition\nApp</string>
     <string name="toolbar_start_title">スタート画面</string>
     <string name="btn_navigate_to_measure">位置を測定する</string>
@@ -25,5 +28,6 @@
     <string name="tv_again">測定する</string>
     <string name="unit_convert">単位変換(m ⇔ yard)</string>
     <string name="btn_save">保存</string>
+    <string name="toolbar_list_title">測定結果一覧</string>
 
 </resources>

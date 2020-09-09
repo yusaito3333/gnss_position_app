@@ -1,17 +1,17 @@
 package com.example.gnsspositionapp.ui.start
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.gnsspositionapp.R
+import com.example.gnsspositionapp.ui.measure.MeasureViewModel
 import kotlinx.android.synthetic.main.start_fragment.*
 
 class StartFragment : Fragment() {
@@ -24,7 +24,7 @@ class StartFragment : Fragment() {
         private const val REQUEST_CODE = 1000
     }
 
-
+    private val measureViewModel : MeasureViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,13 +39,19 @@ class StartFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         btn_to_measure.setOnClickListener{
-            navigateToMeasureFragment()
+            val deniedPermissions = permissionCheck()
+
+            if(deniedPermissions.isEmpty()){
+                navigateToMeasureFragment()
+                measureViewModel.startMeasuringLocation()
+            }else{
+                requestPermissions(deniedPermissions.toTypedArray(), REQUEST_CODE)
+            }
+
         }
 
-        val deniedPermissions = permissionCheck()
-
-        if(deniedPermissions.isNotEmpty()) {
-            requestPermissions(deniedPermissions.toTypedArray(), REQUEST_CODE)
+        btn_list.setOnClickListener {
+            navigateToMeasureFragment()
         }
     }
 

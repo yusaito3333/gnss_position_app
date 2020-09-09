@@ -26,5 +26,5 @@ data class LocationInfo(
     val time: String
         get() = date.format(dateFormatter)
 
-    fun toCSVFormat() = "$name,$date,$latitude,$longitude,$accuracy,$accuracy,$altitude"
+    fun toCSVFormat() = "$name,$date,$latitude,$longitude,$accuracy,$altitude"
 }

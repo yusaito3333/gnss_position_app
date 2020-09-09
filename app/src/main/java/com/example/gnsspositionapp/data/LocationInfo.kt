@@ -13,25 +13,18 @@ data class LocationInfo(
     val diff : Float?,
     val altitude : Double
 ){
-
     companion object {
-        private val formatter = DateTimeFormatter.ofPattern("HH時mm分ss秒")
+        private val dateFormatter = DateTimeFormatter.ofPattern("HH時mm分ss秒")
+        private const val METER_YARD_RATIO = 1.09361f
     }
+    val yardAccuracy : Float
+        get() = accuracy * METER_YARD_RATIO
 
-    private val latitudeFormatted : String
-        get() = "%.2f".format(latitude)
-
-    private val longitudeFormatted : String
-        get() = "%.2f".format(longitude)
-
-    private val accuracyFormatted : String
-        get() = "%.2f".format(accuracy)
-
-    val yard : Float?
-        get() = (diff?: 0f )*1.09361f
+    val yardDiff : Float?
+        get() = (diff?: 0f ) * METER_YARD_RATIO
 
     val time: String
-        get() = date.format(formatter)
+        get() = date.format(dateFormatter)
 
-    fun toCSVFormat() = "$name,$date,$latitudeFormatted,$longitudeFormatted,$accuracyFormatted,$accuracy,$altitude"
+    fun toCSVFormat() = "$name,$date,$latitude,$longitude,$accuracy,$accuracy,$altitude"
 }

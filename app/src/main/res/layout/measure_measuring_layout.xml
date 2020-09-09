@@ -69,9 +69,10 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="@string/edit_txt_file_title_hint"
                 android:text="@={viewModel.locationName}"
+                android:inputType="text"
                 android:maxLines="1"
                 android:maxLength="255" />
 

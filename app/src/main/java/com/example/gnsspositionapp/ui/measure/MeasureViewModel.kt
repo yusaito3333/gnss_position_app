@@ -35,12 +35,11 @@ class MeasureViewModel
     val locations = MutableLiveData<List<LocationInfo>>(listOf())
 
     private var tempLocations = mutableListOf<Location>()
-
     val tempLocationsCount = MutableLiveData(0)
 
     private val notSavedLocations = LinkedList<LocationInfo>()
 
-    private var prevHorizontalAccuracy : Location? = null
+    private var prevMinAccuracy : Location? = null
 
     private var measureJob : Job? = null
 
@@ -49,7 +48,6 @@ class MeasureViewModel
         measureJob?.cancel()
 
         measureJob = viewModelScope.launch {
-
             locationUseCase(Unit)
                 .collect{result ->
                     result.data?.let{
@@ -104,7 +102,7 @@ class MeasureViewModel
                 longitude = minAccuracyInfo.longitude,
                 latitude = minAccuracyInfo.latitude,
                 accuracy = minAccuracyInfo.accuracy,
-                diff = prevHorizontalAccuracy?.distanceTo(minAccuracyInfo),
+                diff = prevMinAccuracy?.distanceTo(minAccuracyInfo),
                 altitude = minAccuracyInfo.altitude
             )
 
@@ -112,12 +110,12 @@ class MeasureViewModel
 
             notSavedLocations.add(newInfo)
 
-            Timber.d("$prevHorizontalAccuracy")
+            Timber.d("$prevMinAccuracy")
             Timber.d("$minAccuracyInfo")
             Timber.d("$newInfo")
 
             //置き換え
-            prevHorizontalAccuracy = minAccuracyInfo
+            prevMinAccuracy = minAccuracyInfo
         }
     }
 

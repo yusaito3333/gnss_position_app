@@ -61,7 +61,7 @@ class MeasureFragment : Fragment(),OnBackPressHandler {
             .setMessage(resources.getString(R.string.dialog_desc))
             .setPositiveButton(resources.getString(R.string.dialog_positive)) { _, _ ->
                 measureViewModel.forceToFinishMeasuringLocation()
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_container).popBackStack()
+                navigateToStartFragment()
             }
             .setNegativeButton(resources.getString(R.string.dialog_negative)) { _, _ -> }
             .show()

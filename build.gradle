@@ -13,6 +13,7 @@ buildscript {
     ext.timber_version = "4.7.1"
     ext.canary_version = "2.4"
     ext.retrofit_version = "2.9.0"
+    ext.okhttp_version = "4.8.0"
     repositories {
         google()
         jcenter()

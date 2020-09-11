@@ -84,6 +84,8 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timber_version"
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$canary_version"
 }

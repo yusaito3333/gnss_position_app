@@ -20,7 +20,8 @@ class StartFragment : Fragment() {
     companion object {
         private val necessaryPermissions = listOf(
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.INTERNET
         )
         private const val REQUEST_CODE = 1000
     }
@@ -57,6 +58,10 @@ class StartFragment : Fragment() {
         btn_list.setOnClickListener {
             navigateToLocationListFragment()
         }
+
+        button.setOnClickListener {
+            navigateToFileSendFragment()
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -83,5 +88,9 @@ class StartFragment : Fragment() {
     }
     private fun navigateToLocationListFragment(){
         findNavController().navigate(R.id.start_to_list)
+    }
+
+    private fun navigateToFileSendFragment() {
+        findNavController().navigate(R.id.file_send_fragment)
     }
 }

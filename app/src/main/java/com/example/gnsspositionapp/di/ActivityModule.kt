@@ -13,6 +13,7 @@ import dagger.hilt.android.qualifiers.ActivityContext
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 @InstallIn(ActivityComponent::class)
 @Module
@@ -33,7 +34,8 @@ object ActivityModule {
     @Provides
     fun provideRetrofit() : Retrofit{
         return Retrofit.Builder()
-            .baseUrl("")
+            .baseUrl("https://slack.com")
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 

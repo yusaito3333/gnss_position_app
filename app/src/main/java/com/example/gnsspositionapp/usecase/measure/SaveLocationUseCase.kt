@@ -7,6 +7,7 @@ import com.example.gnsspositionapp.usecase.BaseUseCase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
+import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.*
@@ -30,11 +31,15 @@ class SaveLocationUseCase @Inject constructor(
 
             val locationInfo = parameters.poll() ?: break
 
-            val date = LocalDateTime.now()
+            val date = LocalDate.now()
 
             val file = File(dir,"${date}.csv")
 
-            BufferedWriter(OutputStreamWriter(FileOutputStream(file), Charset.forName("UTF-8")))
+            if(!file.exists()){
+                file.createNewFile()
+            }
+
+            BufferedWriter(OutputStreamWriter(FileOutputStream(file,true), Charset.forName("UTF-8")))
                 .use{
                     it.write(locationInfo.toCSVFormat())
                 }

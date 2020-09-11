@@ -47,14 +47,21 @@ class MeasureFragment : Fragment(),OnBackPressHandler {
             viewModel = measureViewModel
 
             btnEnd.setOnClickListener {
-                measureViewModel.finishMeasuringLocation()
-                navigateToStartFragment()
+                navigateToLocationListFragment()
                 Timber.d("${measureViewModel.locations.value}")
             }
         }
     }
 
+    //必ずServiceとFlowを閉じる
+    private fun navigateToLocationListFragment() {
+        measureViewModel.finishMeasuringLocation()
+        serviceEventViewModel.measureEnd()
+        findNavController().navigate(R.id.measure_to_list)
+    }
+    //必ずServiceとFlowを閉じる
     private fun navigateToStartFragment() {
+        measureViewModel.forceToFinishMeasuringLocation()
         serviceEventViewModel.measureEnd()
         findNavController().popBackStack()
     }
@@ -63,7 +70,6 @@ class MeasureFragment : Fragment(),OnBackPressHandler {
         AlertDialog.Builder(requireContext())
             .setMessage(resources.getString(R.string.dialog_desc))
             .setPositiveButton(resources.getString(R.string.dialog_positive)) { _, _ ->
-                measureViewModel.forceToFinishMeasuringLocation()
                 navigateToStartFragment()
             }
             .setNegativeButton(resources.getString(R.string.dialog_negative)) { _, _ -> }

@@ -30,4 +30,10 @@
     <string name="btn_save">保存</string>
     <string name="toolbar_list_title">測定結果一覧</string>
 
+    <string name="notification_channel_name">バックグラウンドで測量</string>
+    <string name="notification_title">測量中</string>
+    <string name="notification_remove">取り消し</string>
+    <string name="notification_content">現在バックグラウンドで測定中です</string>
+    <string name="toolbar_file_send_title">ファイル送信</string>
+
 </resources>

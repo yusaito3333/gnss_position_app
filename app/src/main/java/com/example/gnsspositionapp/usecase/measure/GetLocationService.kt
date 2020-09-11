@@ -86,7 +86,7 @@ class GetLocationService : Service() {
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            val name = "location service"
+            val name = getString(R.string.notification_channel_name)
 
             val mChannel = NotificationChannel(CHANNEL_ID,name,NotificationManager.IMPORTANCE_DEFAULT)
 
@@ -121,7 +121,6 @@ class GetLocationService : Service() {
 
     fun removeLocationUpdates() {
 
-        Timber.d("service finished")
         stopService(Intent(applicationContext,GetLocationService::class.java))
 
         try{
@@ -177,9 +176,9 @@ class GetLocationService : Service() {
         val servicePendingIntent = PendingIntent.getService(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT)
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .addAction(R.drawable.ic_baseline_location_on_24,"remove",servicePendingIntent)
-            .setContentText("hello")
-            .setContentTitle("location service")
+            .addAction(R.drawable.ic_baseline_location_on_24,getString(R.string.notification_remove),servicePendingIntent)
+            .setContentText(getString(R.string.notification_content))
+            .setContentTitle(getString(R.string.notification_title))
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setSmallIcon(R.mipmap.ic_launcher)

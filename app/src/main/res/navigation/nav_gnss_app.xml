@@ -19,7 +19,7 @@
 
         <action
             android:id="@+id/start_to_list"
-            app:destination="@id/locationListFragment"
+            app:destination="@id/location_list_fragment"
             app:enterAnim="@anim/slide_from_bottom"
             app:exitAnim="@anim/slide_to_top"
             app:popEnterAnim="@anim/slide_from_top"
@@ -41,9 +41,16 @@
             app:popEnterAnim="@anim/slide_from_top"
             app:popExitAnim="@anim/slide_to_bottom"/>
 
+        <action
+            android:id="@+id/measure_to_list"
+            app:destination="@id/location_list_fragment"
+            app:popUpTo="@id/start_fragment"
+            app:popEnterAnim="@anim/slide_from_top"
+            app:popExitAnim="@anim/slide_to_bottom"/>
+
     </fragment>
     <fragment
-        android:id="@+id/locationListFragment"
+        android:id="@+id/location_list_fragment"
         android:name="com.example.gnsspositionapp.ui.list.LocationListFragment"
         android:label="@string/toolbar_list_title" >
 
@@ -56,4 +63,9 @@
             app:popExitAnim="@anim/slide_to_bottom"/>
 
     </fragment>
+
+    <fragment
+        android:id="@+id/file_send_fragment"
+        android:name="com.example.gnsspositionapp.ui.send.FileSendFragment"
+        android:label="@string/toolbar_file_send_title"/>
 </navigation>

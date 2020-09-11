@@ -12,6 +12,7 @@ import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ActivityContext
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -32,10 +33,20 @@ object ActivityModule {
     }
 
     @Provides
-    fun provideRetrofit() : Retrofit{
+    fun provideRetrofit(client: OkHttpClient) : Retrofit{
         return Retrofit.Builder()
             .baseUrl("https://slack.com")
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Provides
+    fun provideOkHttpClient() : OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BASIC
+            })
             .build()
     }
 

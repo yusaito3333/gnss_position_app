@@ -9,17 +9,20 @@ import com.google.android.gms.location.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import javax.inject.Inject
 
 class GetLocationUseCase
     @Inject constructor(
-    private val fusedLocationProviderClient: FusedLocationProviderClient,
-    private val locationRequest: LocationRequest
+    /*private val fusedLocationProviderClient: FusedLocationProviderClient,
+    private val locationRequest: LocationRequest*/
+    private val repository: Repository
 ) : BaseUseCase<Unit,Location>(Dispatchers.Default){
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    /*@OptIn(ExperimentalCoroutinesApi::class)
     @Throws(SecurityException::class)
     override fun execute(parameters : Unit) = callbackFlow<Result<Location>> {
 
@@ -45,5 +48,8 @@ class GetLocationUseCase
         fusedLocationProviderClient.requestLocationUpdates(locationRequest,wrapper, Looper.getMainLooper())
 
         awaitClose { fusedLocationProviderClient.removeLocationUpdates(wrapper) }
-    }
+    }*/
+
+    override fun execute(parameters: Unit): Flow<Result<Location>> = repository.channel
+        .map { Result.Success(it) }
 }

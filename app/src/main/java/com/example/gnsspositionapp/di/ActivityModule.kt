@@ -1,6 +1,7 @@
 package com.example.gnsspositionapp.di
 
 import android.content.Context
+import com.example.gnsspositionapp.usecase.send.SlackApiService
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -9,6 +10,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ActivityContext
+import okhttp3.Authenticator
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
 
 @InstallIn(ActivityComponent::class)
 @Module
@@ -26,4 +30,15 @@ object ActivityModule {
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
     }
 
+    @Provides
+    fun provideRetrofit() : Retrofit{
+        return Retrofit.Builder()
+            .baseUrl("")
+            .build()
+    }
+
+    @Provides
+    fun provideSlackApiService(retrofit: Retrofit) : SlackApiService {
+        return retrofit.create(SlackApiService::class.java)
+    }
 }

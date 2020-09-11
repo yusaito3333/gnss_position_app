@@ -12,6 +12,7 @@ buildscript {
     ext.hilt_viewmodel_version = "1.0.0-alpha02"
     ext.timber_version = "4.7.1"
     ext.canary_version = "2.4"
+    ext.retrofit_version = "2.9.0"
     repositories {
         google()
         jcenter()

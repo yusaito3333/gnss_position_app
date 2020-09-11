@@ -1,6 +1,11 @@
 package com.example.gnsspositionapp
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -10,8 +15,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.gnsspositionapp.databinding.ActivityMainBinding
 import com.example.gnsspositionapp.ui.measure.MeasureViewModel
 import com.example.gnsspositionapp.ui.measure.OnBackPressHandler
+import com.example.gnsspositionapp.usecase.measure.GetLocationService
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -19,6 +26,23 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
 
     private val measureViewModel : MeasureViewModel by viewModels()
+
+    private val serviceEventViewModel : ServiceEventViewModel by viewModels()
+
+    private var mService : GetLocationService? = null
+
+    private val mServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
+            val binder = p1 as (GetLocationService.LocalBinder)
+            Timber.d("bind")
+            mService = binder.getService()
+        }
+
+        override fun onServiceDisconnected(p0: ComponentName?) {
+            mService = null
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +58,30 @@ class MainActivity : AppCompatActivity() {
         measureViewModel.saveFinishedEvent.observe(this){
             showSaveFinishedSnackBar()
         }
+
+        serviceEventViewModel.measureStartEvent.observe(this){
+            mService!!.requestLocationUpdates()
+        }
+
+        serviceEventViewModel.measureEndEvent.observe(this){
+            mService!!.removeLocationUpdates()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        bindService(
+            Intent(this,GetLocationService::class.java),mServiceConnection,
+            Context.BIND_AUTO_CREATE)
+    }
+
+    override fun onStop() {
+
+        mService?.let{
+            unbindService(mServiceConnection)
+        }
+        super.onStop()
     }
 
     private fun setUpToolbar() {

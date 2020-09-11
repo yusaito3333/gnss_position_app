@@ -8,8 +8,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.example.gnsspositionapp.ServiceEventViewModel
 import com.example.gnsspositionapp.R
 import com.example.gnsspositionapp.databinding.MeasureMeasuringLayoutBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,6 +21,8 @@ class MeasureFragment : Fragment(),OnBackPressHandler {
     private lateinit var binding : MeasureMeasuringLayoutBinding
 
     private val measureViewModel : MeasureViewModel by activityViewModels()
+
+    private val serviceEventViewModel : ServiceEventViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +55,7 @@ class MeasureFragment : Fragment(),OnBackPressHandler {
     }
 
     private fun navigateToStartFragment() {
+        serviceEventViewModel.measureEnd()
         findNavController().popBackStack()
     }
 

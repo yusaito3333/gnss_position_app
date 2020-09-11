@@ -12,6 +12,7 @@ import com.example.gnsspositionapp.usecase.measure.GetLocationUseCase
 import com.example.gnsspositionapp.usecase.measure.SaveLocationUseCase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
@@ -49,7 +50,8 @@ class MeasureViewModel
 
         measureJob = viewModelScope.launch {
             locationUseCase(Unit)
-                .collect{result ->
+                .collectLatest{result ->
+                    Timber.d("update")
                     result.data?.let{
                         tempLocations.add(it)
                         tempLocationsCount.value = tempLocationsCount.value!! + 1

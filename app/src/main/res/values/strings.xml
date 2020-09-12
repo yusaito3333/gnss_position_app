@@ -8,6 +8,7 @@
     <string name="toolbar_start_title">スタート画面</string>
     <string name="btn_navigate_to_measure">位置を測定する</string>
     <string name="btn_navigate_to_list">一覧を表示する</string>
+    <string name="btn_navigate_to_send">Slackに送信</string>
 
     <string name="edit_txt_file_title_hint">位置名称を入力してください</string>
     <string name="loading_txt">測定中です</string>
@@ -35,5 +36,6 @@
     <string name="notification_remove">取り消し</string>
     <string name="notification_content">現在バックグラウンドで測定中です</string>
     <string name="toolbar_file_send_title">ファイル送信</string>
+    <string name="btn_send">送信</string>
 
 </resources>

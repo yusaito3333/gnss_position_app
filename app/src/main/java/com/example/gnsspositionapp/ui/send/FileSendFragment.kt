@@ -12,7 +12,7 @@ import com.example.gnsspositionapp.databinding.FileSendFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FileSendFragment : Fragment() {
+class FileSendFragment : Fragment() ,OnItemSelected{
 
     private val viewModel : FileSendViewModel by viewModels()
 
@@ -23,7 +23,7 @@ class FileSendFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = FileListAdapter()
+        adapter = FileListAdapter(this)
 
         binding.fileList.adapter = adapter
 
@@ -49,5 +49,13 @@ class FileSendFragment : Fragment() {
         )
 
         return binding.root
+    }
+
+    override fun onChecked(position: Int) {
+        viewModel.addPosition(position)
+    }
+
+    override fun onUnChecked(position: Int) {
+        viewModel.removePosition(position)
     }
 }

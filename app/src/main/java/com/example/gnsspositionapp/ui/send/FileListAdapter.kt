@@ -10,11 +10,18 @@ import com.example.gnsspositionapp.R
 import com.example.gnsspositionapp.databinding.FileListItemBinding
 import java.io.File
 
-class FileListAdapter : ListAdapter<File,FileListAdapter.ViewHolder>(ItemCallBack) {
+class FileListAdapter(private val onItemSelected: OnItemSelected? = null) : ListAdapter<File,FileListAdapter.ViewHolder>(ItemCallBack) {
 
     class ViewHolder(val binding : FileListItemBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(file :File){
+        fun bind(file :File,onItemSelected: OnItemSelected?){
             binding.tvFileName.text = file.name
+            binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
+                if(isChecked){
+                    onItemSelected?.onChecked(adapterPosition)
+                }else{
+                    onItemSelected?.onUnChecked(adapterPosition)
+                }
+            }
         }
     }
 
@@ -29,7 +36,7 @@ class FileListAdapter : ListAdapter<File,FileListAdapter.ViewHolder>(ItemCallBac
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position),onItemSelected)
     }
 }
 
@@ -41,5 +48,10 @@ object ItemCallBack : DiffUtil.ItemCallback<File>(){
     override fun areContentsTheSame(oldItem: File, newItem: File): Boolean {
         return oldItem == newItem
     }
+}
 
+interface OnItemSelected{
+    fun onChecked(position: Int)
+
+    fun onUnChecked(position : Int)
 }

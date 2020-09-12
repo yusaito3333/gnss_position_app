@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.File
 
 class FileSendViewModel
     @ViewModelInject constructor(
@@ -25,12 +24,20 @@ class FileSendViewModel
         .map { it.data }
         .asLiveData()
 
-    val selectedFileLists = arrayListOf<File>()
+    private val selectedFileIndices = hashSetOf<Int>()
 
     fun sendCSVFiles() {
         viewModelScope.launch {
-            csvFileSendUseCase(fileLists.value!!)
+            csvFileSendUseCase(fileLists.value!!.filterIndexed { index, _ -> index in selectedFileIndices })
                 .collect { if( it is Result.Error) Timber.e(it.exception) }
         }
+    }
+
+    fun addPosition(position : Int){
+        selectedFileIndices.add(position)
+    }
+
+    fun removePosition(position: Int){
+        selectedFileIndices.remove(position)
     }
 }

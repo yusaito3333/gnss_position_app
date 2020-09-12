@@ -1,13 +1,14 @@
 package com.example.gnsspositionapp.usecase.send
 
+import com.example.gnsspositionapp.BuildConfig
 import com.example.gnsspositionapp.data.Result
 import com.example.gnsspositionapp.usecase.BaseUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import timber.log.Timber
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import javax.inject.Inject
 
@@ -18,24 +19,30 @@ class CsvFileSendUseCase
 
     companion object {
         const val MEDIA_TYPE_CSV = "text/csv"
+        const val MEDIA_TYPE_MULTI_PART = "multipart/form-data"
+        const val CHANNEL_NAME = "test_channel"
+
     }
 
     override fun execute(parameters: List<File>) = flow {
 
-        val token = RequestBody.create(MediaType.parse("multipart/form-data"),"")
+        emit(Result.Loading)
 
-        val channel = RequestBody.create(
-            MediaType.parse("multipart/form-data"), "test_channel")
+        val token = BuildConfig.API_KEY.toRequestBody(MEDIA_TYPE_MULTI_PART.toMediaType())
 
-        val parts = parameters.forEach {
-            val part = MultipartBody.Part.createFormData(
+        val channels = CHANNEL_NAME.toRequestBody(MEDIA_TYPE_MULTI_PART.toMediaType())
+
+        parameters.forEach {
+
+            val file = MultipartBody.Part.createFormData(
                 "file",
                 it.name,
-                RequestBody.create(MediaType.parse(MEDIA_TYPE_CSV),it)
+                it.asRequestBody(MEDIA_TYPE_CSV.toMediaType())
             )
-            val result = service.uploadCSVFiles(token,channel,part)
 
-            Timber.d("${result.string()}")
+            val filename = it.name.toRequestBody(MEDIA_TYPE_MULTI_PART.toMediaType())
+
+            service.uploadCSVFiles(token, channels,file,filename)
         }
 
         emit(Result.Success(Unit))

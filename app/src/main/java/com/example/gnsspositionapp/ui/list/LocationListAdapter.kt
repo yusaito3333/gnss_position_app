@@ -1,4 +1,4 @@
-package com.example.gnsspositionapp.ui.measure
+package com.example.gnsspositionapp.ui.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +10,9 @@ import com.example.gnsspositionapp.R
 import com.example.gnsspositionapp.data.LocationInfo
 import com.example.gnsspositionapp.databinding.MeasurementListItemBinding
 
-class LocationListAdapter(private var isYard : Boolean) : ListAdapter<LocationInfo,ViewHolder>(ItemCallBack) {
+class LocationListAdapter(private var isYard : Boolean)
+    : ListAdapter<LocationInfo, ViewHolder>(ItemCallBack) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             DataBindingUtil.inflate(

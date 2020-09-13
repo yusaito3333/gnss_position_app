@@ -8,19 +8,19 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.gnsspositionapp.ServiceEventViewModel
 import com.example.gnsspositionapp.R
 import com.example.gnsspositionapp.databinding.MeasureMeasuringLayoutBinding
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class MeasureFragment : Fragment(),OnBackPressHandler {
 
     private lateinit var binding : MeasureMeasuringLayoutBinding
 
-    private val measureViewModel : MeasureViewModel by activityViewModels()
+    private val measureViewModel : MeasureViewModel by viewModels()
 
     private val serviceEventViewModel : ServiceEventViewModel by activityViewModels()
 
@@ -48,7 +48,6 @@ class MeasureFragment : Fragment(),OnBackPressHandler {
 
             btnEnd.setOnClickListener {
                 navigateToLocationListFragment()
-                Timber.d("${measureViewModel.locations.value}")
             }
         }
     }

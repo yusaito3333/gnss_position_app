@@ -12,11 +12,23 @@ class ServiceEventViewModel
 
     val measureEndEvent = MutableLiveData<Event<Unit>>()
 
+    val saveStartEvent = MutableLiveData<Event<Unit>>()
+
+    val saveEndEvent = MutableLiveData<Event<Unit>>()
+
     fun measureStart() {
         measureStartEvent.value = Event(Unit)
     }
 
     fun measureEnd() {
         measureEndEvent.value = Event(Unit)
+    }
+
+    fun saveStart() {
+        saveStartEvent.value = Event(Unit)
+    }
+
+    fun saveEnd() {
+        saveEndEvent.value = Event(Unit)
     }
 }

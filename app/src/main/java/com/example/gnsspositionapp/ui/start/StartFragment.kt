@@ -12,7 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.gnsspositionapp.ServiceEventViewModel
 import com.example.gnsspositionapp.R
-import com.example.gnsspositionapp.ui.measure.MeasureViewModel
 import kotlinx.android.synthetic.main.start_fragment.*
 
 class StartFragment : Fragment() {
@@ -25,8 +24,6 @@ class StartFragment : Fragment() {
         )
         private const val REQUEST_CODE = 1000
     }
-
-    private val measureViewModel : MeasureViewModel by activityViewModels()
 
     private val serviceEventViewModel : ServiceEventViewModel by activityViewModels()
 
@@ -48,7 +45,6 @@ class StartFragment : Fragment() {
             if(deniedPermissions.isEmpty()){
                 navigateToMeasureFragment()
                 serviceEventViewModel.measureStart()
-                measureViewModel.startMeasuringLocation()
             }else{
                 requestPermissions(deniedPermissions.toTypedArray(), REQUEST_CODE)
             }

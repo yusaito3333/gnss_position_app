@@ -1,28 +1,28 @@
-package com.example.gnsspositionapp.usecase.measure
+package com.example.gnsspositionapp.usecase.list
 
 import android.content.Context
-import com.example.gnsspositionapp.data.LocationInfo
 import com.example.gnsspositionapp.data.Result
 import com.example.gnsspositionapp.usecase.BaseUseCase
+import com.example.gnsspositionapp.usecase.measure.LocationRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import org.threeten.bp.LocalDate
 import java.io.*
 import java.nio.charset.Charset
-import java.util.*
 import javax.inject.Inject
 
 @Suppress("BlockingMethodInNonBlockingContext")
 class SaveLocationUseCase @Inject constructor(
-    @ApplicationContext private val context : Context
-) : BaseUseCase<Queue<LocationInfo>,Unit>(Dispatchers.IO){
+    @ApplicationContext private val context : Context,
+    private val repository: LocationRepository
+) : BaseUseCase<Unit,Unit>(Dispatchers.IO){
 
     companion object {
         private const val HEADER = "位置名称,日時,緯度,経度,精度,高さ"
     }
 
-    override fun execute(parameters : Queue<LocationInfo>) = flow{
+    override fun execute(parameters : Unit) = flow{
 
         emit(Result.Loading)
 
@@ -30,7 +30,7 @@ class SaveLocationUseCase @Inject constructor(
 
         while(true){
 
-            val locationInfo = parameters.poll() ?: break
+            val locationInfo = repository.notSavedLocations.poll() ?: break
 
             val date = LocalDate.now()
 

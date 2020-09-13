@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.gnsspositionapp.R
 import com.example.gnsspositionapp.ServiceEventViewModel
 import com.example.gnsspositionapp.databinding.MeasureFinishedLayoutBinding
-import com.example.gnsspositionapp.ui.measure.MeasureViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -23,7 +23,7 @@ class LocationListFragment : Fragment() {
 
     private lateinit var adapter : LocationListAdapter
 
-    private val measureViewModel : MeasureViewModel by activityViewModels()
+    private val locationListViewModel : LocationListViewModel by viewModels()
 
     private val serviceEventViewModel : ServiceEventViewModel by activityViewModels()
 
@@ -45,12 +45,12 @@ class LocationListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = LocationListAdapter(measureViewModel.unitIsYard.value!!)
+        adapter = LocationListAdapter(locationListViewModel.unitIsYard.value!!)
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 
-            viewModel = measureViewModel
+            viewModel = locationListViewModel
 
             locationList.apply {
                 adapter = this@LocationListFragment.adapter
@@ -58,21 +58,23 @@ class LocationListFragment : Fragment() {
             }
 
             btnSave.setOnClickListener {
-                measureViewModel.saveLocations()
+                serviceEventViewModel.saveStart()
+                locationListViewModel.saveLocations()
+                serviceEventViewModel.saveEnd()
             }
 
             btnMeasureAgain.setOnClickListener {
-                measureViewModel.startMeasuringLocation()
+                //measureViewModel.startMeasuringLocation()
                 serviceEventViewModel.measureStart()
                 navigateToMeasureFragment()
             }
         }
 
-        measureViewModel.locations.observe(viewLifecycleOwner) {
+        locationListViewModel.locations.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
 
-        measureViewModel.unitIsYard.observe(viewLifecycleOwner) {
+        locationListViewModel.unitIsYard.observe(viewLifecycleOwner) {
             adapter.convertUnit(it)
         }
     }

@@ -14,7 +14,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.gnsspositionapp.data.EventObserver
 import com.example.gnsspositionapp.databinding.ActivityMainBinding
-import com.example.gnsspositionapp.ui.measure.MeasureViewModel
 import com.example.gnsspositionapp.ui.measure.OnBackPressHandler
 import com.example.gnsspositionapp.usecase.measure.GetLocationService
 import com.google.android.material.snackbar.Snackbar
@@ -25,8 +24,6 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
-
-    private val measureViewModel : MeasureViewModel by viewModels()
 
     private val serviceEventViewModel : ServiceEventViewModel by viewModels()
 
@@ -52,11 +49,11 @@ class MainActivity : AppCompatActivity() {
 
         setUpToolbar()
 
-        measureViewModel.savingEvent.observe(this,EventObserver{
+        serviceEventViewModel.saveStartEvent.observe(this,EventObserver{
             showSavingSnackBar()
         })
 
-        measureViewModel.saveFinishedEvent.observe(this,EventObserver{
+        serviceEventViewModel.saveEndEvent.observe(this,EventObserver{
             showSaveFinishedSnackBar()
         })
 

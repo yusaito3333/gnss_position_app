@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.example.gnsspositionapp.data.EventObserver
 import com.example.gnsspositionapp.databinding.ActivityMainBinding
 import com.example.gnsspositionapp.ui.measure.MeasureViewModel
 import com.example.gnsspositionapp.ui.measure.OnBackPressHandler
@@ -32,13 +33,13 @@ class MainActivity : AppCompatActivity() {
     private var mService : GetLocationService? = null
 
     private val mServiceConnection = object : ServiceConnection {
-        override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
-            val binder = p1 as (GetLocationService.LocalBinder)
+        override fun onServiceConnected(componentName: ComponentName?, iBinder: IBinder?) {
+            val binder = iBinder as (GetLocationService.LocalBinder)
             Timber.d("bind")
             mService = binder.getService()
         }
 
-        override fun onServiceDisconnected(p0: ComponentName?) {
+        override fun onServiceDisconnected(componentName: ComponentName?) {
             mService = null
         }
 
@@ -51,21 +52,21 @@ class MainActivity : AppCompatActivity() {
 
         setUpToolbar()
 
-        measureViewModel.savingEvent.observe(this){
+        measureViewModel.savingEvent.observe(this,EventObserver{
             showSavingSnackBar()
-        }
+        })
 
-        measureViewModel.saveFinishedEvent.observe(this){
+        measureViewModel.saveFinishedEvent.observe(this,EventObserver{
             showSaveFinishedSnackBar()
-        }
+        })
 
-        serviceEventViewModel.measureStartEvent.observe(this){
+        serviceEventViewModel.measureStartEvent.observe(this,EventObserver{
             mService!!.requestLocationUpdates()
-        }
+        })
 
-        serviceEventViewModel.measureEndEvent.observe(this){
+        serviceEventViewModel.measureEndEvent.observe(this,EventObserver{
             mService!!.removeLocationUpdates()
-        }
+        })
     }
 
     override fun onStart() {

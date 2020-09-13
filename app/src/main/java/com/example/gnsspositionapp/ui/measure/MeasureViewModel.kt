@@ -5,6 +5,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.gnsspositionapp.data.Event
 import com.example.gnsspositionapp.data.LocationInfo
 import com.example.gnsspositionapp.data.Result
 import com.example.gnsspositionapp.data.data
@@ -12,7 +13,6 @@ import com.example.gnsspositionapp.usecase.measure.GetLocationUseCase
 import com.example.gnsspositionapp.usecase.measure.SaveLocationUseCase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
@@ -25,9 +25,9 @@ class MeasureViewModel
     private val saveLocationUseCase: SaveLocationUseCase
 ) : ViewModel() {
 
-    val saveFinishedEvent = MutableLiveData<Unit>()
+    val saveFinishedEvent = MutableLiveData<Event<Unit>>()
 
-    val savingEvent = MutableLiveData<Unit>()
+    val savingEvent = MutableLiveData<Event<Unit>>()
 
     val unitIsYard = MutableLiveData(false)
 
@@ -50,8 +50,8 @@ class MeasureViewModel
 
         measureJob = viewModelScope.launch {
             locationUseCase(Unit)
-                .collectLatest{result ->
-                    Timber.d("update")
+                .collect{result ->
+                    Timber.tag("locationViewModel").d("update ${result.data?.accuracy}")
                     result.data?.let{
                         tempLocations.add(it)
                         tempLocationsCount.value = tempLocationsCount.value!! + 1
@@ -84,8 +84,8 @@ class MeasureViewModel
             saveLocationUseCase(notSavedLocations)
                 .collect {
                     when(it){
-                        is Result.Success -> saveFinishedEvent.value = Unit
-                        is Result.Loading -> savingEvent.value = Unit
+                        is Result.Success -> saveFinishedEvent.value = Event(Unit)
+                        is Result.Loading -> savingEvent.value = Event(Unit)
                         is Result.Error -> Timber.e(it.exception)
                     }
                 }
@@ -108,13 +108,10 @@ class MeasureViewModel
                 altitude = minAccuracyInfo.altitude
             )
 
-            locations.postValue(locations.value?.plus(newInfo))
+            //時刻の昇順になるように、逆順にする
+            locations.postValue(locations.value?.plus(newInfo)?.asReversed())
 
             notSavedLocations.add(newInfo)
-
-            Timber.d("$prevMinAccuracy")
-            Timber.d("$minAccuracyInfo")
-            Timber.d("$newInfo")
 
             //置き換え
             prevMinAccuracy = minAccuracyInfo

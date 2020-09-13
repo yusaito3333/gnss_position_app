@@ -8,9 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.gnsspositionapp.R
+import com.example.gnsspositionapp.ServiceEventViewModel
 import com.example.gnsspositionapp.databinding.MeasureFinishedLayoutBinding
-import com.example.gnsspositionapp.ui.measure.LocationListAdapter
 import com.example.gnsspositionapp.ui.measure.MeasureViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,6 +24,8 @@ class LocationListFragment : Fragment() {
     private lateinit var adapter : LocationListAdapter
 
     private val measureViewModel : MeasureViewModel by activityViewModels()
+
+    private val serviceEventViewModel : ServiceEventViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,7 +52,10 @@ class LocationListFragment : Fragment() {
 
             viewModel = measureViewModel
 
-            locationList.adapter = adapter
+            locationList.apply {
+                adapter = this@LocationListFragment.adapter
+                addItemDecoration(DividerItemDecoration(this.context,DividerItemDecoration.VERTICAL))
+            }
 
             btnSave.setOnClickListener {
                 measureViewModel.saveLocations()
@@ -57,6 +63,7 @@ class LocationListFragment : Fragment() {
 
             btnMeasureAgain.setOnClickListener {
                 measureViewModel.startMeasuringLocation()
+                serviceEventViewModel.measureStart()
                 navigateToMeasureFragment()
             }
         }

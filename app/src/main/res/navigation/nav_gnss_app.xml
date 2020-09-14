@@ -25,6 +25,15 @@
             app:popEnterAnim="@anim/slide_from_top"
             app:popExitAnim="@anim/slide_to_bottom"/>
 
+        <action
+            android:id="@+id/start_to_send"
+            app:destination="@id/file_send_fragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
+
+
     </fragment>
 
     <fragment
@@ -45,6 +54,8 @@
             android:id="@+id/measure_to_list"
             app:destination="@id/location_list_fragment"
             app:popUpTo="@id/start_fragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
             app:popEnterAnim="@anim/slide_from_top"
             app:popExitAnim="@anim/slide_to_bottom"/>
 
@@ -59,6 +70,8 @@
             android:id="@+id/location_to_measure"
             app:destination="@id/measure_fragment"
             app:popUpTo="@id/start_fragment"
+            app:enterAnim="@anim/slide_from_left"
+            app:exitAnim="@anim/slide_to_right"
             app:popEnterAnim="@anim/slide_from_top"
             app:popExitAnim="@anim/slide_to_bottom"/>
 

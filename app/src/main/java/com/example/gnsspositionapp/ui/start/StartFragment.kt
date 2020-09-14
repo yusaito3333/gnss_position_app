@@ -87,6 +87,6 @@ class StartFragment : Fragment() {
     }
 
     private fun navigateToFileSendFragment() {
-        findNavController().navigate(R.id.file_send_fragment)
+        findNavController().navigate(R.id.start_to_send)
     }
 }

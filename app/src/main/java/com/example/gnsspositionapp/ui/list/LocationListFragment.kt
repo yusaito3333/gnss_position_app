@@ -12,7 +12,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.gnsspositionapp.R
 import com.example.gnsspositionapp.ServiceEventViewModel
+import com.example.gnsspositionapp.data.EventObserver
 import com.example.gnsspositionapp.databinding.MeasureFinishedLayoutBinding
+import com.example.gnsspositionapp.ui.showIndefiniteSnackBar
+import com.example.gnsspositionapp.ui.showShortSnackBar
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -58,13 +61,10 @@ class LocationListFragment : Fragment() {
             }
 
             btnSave.setOnClickListener {
-                serviceEventViewModel.saveStart()
                 locationListViewModel.saveLocations()
-                serviceEventViewModel.saveEnd()
             }
 
             btnMeasureAgain.setOnClickListener {
-                //measureViewModel.startMeasuringLocation()
                 serviceEventViewModel.measureStart()
                 navigateToMeasureFragment()
             }
@@ -77,6 +77,14 @@ class LocationListFragment : Fragment() {
         locationListViewModel.unitIsYard.observe(viewLifecycleOwner) {
             adapter.convertUnit(it)
         }
+
+        locationListViewModel.saveStartEvent.observe(viewLifecycleOwner,EventObserver{
+            showIndefiniteSnackBar(binding.root,requireContext(),R.string.snack_bar_saving)
+        })
+
+        locationListViewModel.saveFinishedEvent.observe(viewLifecycleOwner,EventObserver{
+            showShortSnackBar(binding.root,requireContext(),R.string.snack_bar_send_finished)
+        })
     }
 
     private fun navigateToMeasureFragment() {

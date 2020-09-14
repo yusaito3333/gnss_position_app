@@ -15,6 +15,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.gnsspositionapp.data.EventObserver
 import com.example.gnsspositionapp.databinding.ActivityMainBinding
 import com.example.gnsspositionapp.ui.measure.OnBackPressHandler
+import com.example.gnsspositionapp.ui.showIndefiniteSnackBar
+import com.example.gnsspositionapp.ui.showShortSnackBar
 import com.example.gnsspositionapp.usecase.measure.GetLocationService
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,14 +50,6 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
 
         setUpToolbar()
-
-        serviceEventViewModel.saveStartEvent.observe(this,EventObserver{
-            showSavingSnackBar()
-        })
-
-        serviceEventViewModel.saveEndEvent.observe(this,EventObserver{
-            showSaveFinishedSnackBar()
-        })
 
         serviceEventViewModel.measureStartEvent.observe(this,EventObserver{
             mService!!.requestLocationUpdates()
@@ -92,15 +86,6 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.setupWithNavController(navController,appBarConf)
     }
 
-    private fun showSavingSnackBar() {
-        Snackbar.make(binding.root,getString(R.string.snack_bar_saving),Snackbar.LENGTH_INDEFINITE)
-            .show()
-    }
-
-    private fun showSaveFinishedSnackBar() {
-        Snackbar.make(binding.root,getString(R.string.snack_bar_save_finished),Snackbar.LENGTH_SHORT)
-            .show()
-    }
 
     override fun onBackPressed() {
         val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment

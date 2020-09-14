@@ -3,16 +3,17 @@ package com.example.gnsspositionapp.ui.start
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.onNavDestinationSelected
 import com.example.gnsspositionapp.ServiceEventViewModel
 import com.example.gnsspositionapp.R
 import kotlinx.android.synthetic.main.start_fragment.*
+import timber.log.Timber
 
 class StartFragment : Fragment() {
 
@@ -27,12 +28,16 @@ class StartFragment : Fragment() {
 
     private val serviceEventViewModel : ServiceEventViewModel by activityViewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.start_fragment,container,false)
     }
 
@@ -89,4 +94,18 @@ class StartFragment : Fragment() {
     private fun navigateToFileSendFragment() {
         findNavController().navigate(R.id.start_to_send)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.toolbar_menu,menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        val navController = findNavController()
+
+        Timber.d("selected")
+
+        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
+    }
+
 }

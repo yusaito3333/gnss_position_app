@@ -40,5 +40,6 @@
     <string name="toolbar_file_send_title">ファイル送信</string>
     <string name="btn_send">送信</string>
     <string name="btn_delete">削除</string>
+    <string name="settings">設定</string>
 
 </resources>

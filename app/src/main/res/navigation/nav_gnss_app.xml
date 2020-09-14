@@ -81,4 +81,9 @@
         android:id="@+id/file_send_fragment"
         android:name="com.example.gnsspositionapp.ui.send.FileSendFragment"
         android:label="@string/toolbar_file_send_title"/>
+
+    <fragment
+        android:id="@+id/settings_fragment"
+        android:name="com.example.gnsspositionapp.ui.settings.SettingsFragment"
+        android:label="@string/settings"/>
 </navigation>

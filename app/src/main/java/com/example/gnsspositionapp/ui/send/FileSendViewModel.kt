@@ -1,12 +1,15 @@
 package com.example.gnsspositionapp.ui.send
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.gnsspositionapp.data.Event
 import com.example.gnsspositionapp.data.Result
 import com.example.gnsspositionapp.data.data
 import com.example.gnsspositionapp.usecase.send.CsvFileSendUseCase
+import com.example.gnsspositionapp.usecase.send.DeleteCSVFilesUseCase
 import com.example.gnsspositionapp.usecase.send.GetCSVFileUseCase
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
@@ -15,10 +18,14 @@ import timber.log.Timber
 
 class FileSendViewModel
     @ViewModelInject constructor(
-        private val getCSVFileUseCase: GetCSVFileUseCase,
-        private val csvFileSendUseCase: CsvFileSendUseCase
+        getCSVFileUseCase: GetCSVFileUseCase,
+        private val csvFileSendUseCase: CsvFileSendUseCase,
+        private val deleteCSVFilesUseCase: DeleteCSVFilesUseCase
     ): ViewModel() {
 
+    val sendFinishedEvent = MutableLiveData<Event<Unit>>()
+
+    val sendErrorEvent = MutableLiveData<Event<Unit>>()
 
     val fileLists = getCSVFileUseCase(Unit)
         .map { it.data }
@@ -29,7 +36,24 @@ class FileSendViewModel
     fun sendCSVFiles() {
         viewModelScope.launch {
             csvFileSendUseCase(fileLists.value!!.filterIndexed { index, _ -> index in selectedFileIndices })
-                .collect { if( it is Result.Error) Timber.e(it.exception) }
+                .collect {
+                    when(it) {
+                        is Result.Success -> sendFinishedEvent.value = Event(Unit)
+
+                        is Result.Error -> {
+                            sendErrorEvent.value = Event(Unit)
+                            Timber.e(it.exception)
+                        }
+                    }
+
+                }
+        }
+    }
+
+    fun deleteCSVFiles() {
+        viewModelScope.launch {
+            deleteCSVFilesUseCase(fileLists.value!!.filterIndexed{index, _ -> index in selectedFileIndices })
+            selectedFileIndices.clear()
         }
     }
 

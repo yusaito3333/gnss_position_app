@@ -8,7 +8,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.gnsspositionapp.R
+import com.example.gnsspositionapp.data.EventObserver
 import com.example.gnsspositionapp.databinding.FileSendFragmentBinding
+import com.example.gnsspositionapp.ui.showShortSnackBar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,15 +27,31 @@ class FileSendFragment : Fragment() ,OnItemSelected{
 
         adapter = FileListAdapter(this)
 
-        binding.fileList.adapter = adapter
+        binding.apply {
+            fileList.adapter = this@FileSendFragment.adapter
 
-        binding.btnSend.setOnClickListener {
-            viewModel.sendCSVFiles()
+            btnSend.setOnClickListener {
+                viewModel.sendCSVFiles()
+            }
+
+            btnDelete.setOnClickListener {
+                viewModel.deleteCSVFiles()
+            }
         }
+
 
         viewModel.fileLists.observe(viewLifecycleOwner){
             adapter.submitList(it)
         }
+
+        viewModel.sendFinishedEvent.observe(viewLifecycleOwner,EventObserver{
+            showShortSnackBar(binding.root,requireContext(),R.string.snack_bar_send_finished)
+        })
+
+        viewModel.sendErrorEvent.observe(viewLifecycleOwner,EventObserver{
+            showShortSnackBar(binding.root,requireContext(),R.string.snack_bar_send_error)
+        })
+
     }
 
     override fun onCreateView(

@@ -3,6 +3,8 @@
 
     <string name="snack_bar_saving">保存中です</string>
     <string name="snack_bar_save_finished">保存完了しました</string>
+    <string name="snack_bar_send_finished">送信完了しました</string>
+    <string name="snack_bar_send_error">送信失敗しました</string>
 
     <string name="app_title">Gnss\nPosition\nApp</string>
     <string name="toolbar_start_title">スタート画面</string>
@@ -37,5 +39,6 @@
     <string name="notification_content">現在バックグラウンドで測定中です</string>
     <string name="toolbar_file_send_title">ファイル送信</string>
     <string name="btn_send">送信</string>
+    <string name="btn_delete">削除</string>
 
 </resources>

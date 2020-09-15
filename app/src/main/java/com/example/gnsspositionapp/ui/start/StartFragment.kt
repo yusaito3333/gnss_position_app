@@ -92,15 +92,12 @@ class StartFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        Timber.tag("OptionMenu").d("Fragment Created")
         inflater.inflate(R.menu.toolbar_menu,menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         val navController = findNavController()
-
-        Timber.tag("OptionMenu").d("Fragment selected")
 
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }

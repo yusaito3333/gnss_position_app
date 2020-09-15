@@ -83,7 +83,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpToolbar() {
-
         setSupportActionBar(binding.toolbar)
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
@@ -93,6 +92,7 @@ class MainActivity : AppCompatActivity() {
         val appBarConf = AppBarConfiguration(setOf(R.id.measure_fragment,R.id.start_fragment))
 
         binding.toolbar.setupWithNavController(navController,appBarConf)
+
     }
 
 

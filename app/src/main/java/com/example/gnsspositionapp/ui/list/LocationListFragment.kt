@@ -83,7 +83,7 @@ class LocationListFragment : Fragment() {
         })
 
         locationListViewModel.saveFinishedEvent.observe(viewLifecycleOwner,EventObserver{
-            showShortSnackBar(binding.root,requireContext(),R.string.snack_bar_send_finished)
+            showShortSnackBar(binding.root,requireContext(),R.string.snack_bar_save_finished)
         })
     }
 

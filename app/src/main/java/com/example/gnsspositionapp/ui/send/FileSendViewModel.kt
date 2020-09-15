@@ -11,10 +11,13 @@ import com.example.gnsspositionapp.data.data
 import com.example.gnsspositionapp.usecase.send.CsvFileSendUseCase
 import com.example.gnsspositionapp.usecase.send.DeleteCSVFilesUseCase
 import com.example.gnsspositionapp.usecase.send.GetCSVFileUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.io.File
 
 class FileSendViewModel
     @ViewModelInject constructor(
@@ -26,6 +29,8 @@ class FileSendViewModel
     val sendFinishedEvent = MutableLiveData<Event<Unit>>()
 
     val sendErrorEvent = MutableLiveData<Event<Unit>>()
+
+    val sharedFile = MutableLiveData<Event<File>>()
 
     val fileLists = getCSVFileUseCase(Unit)
         .map { it.data }
@@ -54,6 +59,19 @@ class FileSendViewModel
         viewModelScope.launch {
             deleteCSVFilesUseCase(fileLists.value!!.filterIndexed{index, _ -> index in selectedFileIndices })
             selectedFileIndices.clear()
+        }
+    }
+
+    fun shareCSVFiles() {
+        viewModelScope.launch {
+            val file = withContext(Dispatchers.Default){
+                fileLists.value?.filterIndexed { index, _ -> index in selectedFileIndices }
+                    ?.firstOrNull()
+            }
+
+            file?.let{
+                sharedFile.value = Event(file)
+            }
         }
     }
 

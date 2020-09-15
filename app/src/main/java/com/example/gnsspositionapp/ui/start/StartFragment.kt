@@ -28,16 +28,12 @@ class StartFragment : Fragment() {
 
     private val serviceEventViewModel : ServiceEventViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.start_fragment,container,false)
     }
 
@@ -96,6 +92,7 @@ class StartFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        Timber.tag("OptionMenu").d("Fragment Created")
         inflater.inflate(R.menu.toolbar_menu,menu)
     }
 
@@ -103,7 +100,7 @@ class StartFragment : Fragment() {
 
         val navController = findNavController()
 
-        Timber.d("selected")
+        Timber.tag("OptionMenu").d("Fragment selected")
 
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }

@@ -1,8 +1,11 @@
 package com.example.gnsspositionapp.usecase.send
 
+import android.content.Context
+import androidx.preference.PreferenceManager
 import com.example.gnsspositionapp.BuildConfig
 import com.example.gnsspositionapp.data.Result
 import com.example.gnsspositionapp.usecase.BaseUseCase
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import okhttp3.MediaType.Companion.toMediaType
@@ -14,23 +17,31 @@ import javax.inject.Inject
 
 class CsvFileSendUseCase
     @Inject constructor(
-    private val service: SlackApiService
+    private val service: SlackApiService,
+    @ApplicationContext private val context : Context
 ) : BaseUseCase<List<File>,Unit>(Dispatchers.IO) {
 
     companion object {
         const val MEDIA_TYPE_CSV = "text/csv"
         const val MEDIA_TYPE_MULTI_PART = "multipart/form-data"
         const val CHANNEL_NAME = "test_channel"
-
+        const val CHANNEL_KEY = "slack_channel_name"
+        const val API_KEY = "slack_api_key"
     }
 
     override fun execute(parameters: List<File>) = flow {
 
         emit(Result.Loading)
 
-        val token = BuildConfig.API_KEY.toRequestBody(MEDIA_TYPE_MULTI_PART.toMediaType())
+        val tokenName = PreferenceManager.getDefaultSharedPreferences(context)
+            .getString(API_KEY,"") ?: ""
 
-        val channels = CHANNEL_NAME.toRequestBody(MEDIA_TYPE_MULTI_PART.toMediaType())
+        val channelName = PreferenceManager.getDefaultSharedPreferences(context)
+            .getString(CHANNEL_KEY,"") ?: ""
+
+        val token = tokenName.toRequestBody(MEDIA_TYPE_MULTI_PART.toMediaType())
+
+        val channels = channelName.toRequestBody(MEDIA_TYPE_MULTI_PART.toMediaType())
 
         parameters.forEach {
 

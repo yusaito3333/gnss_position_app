@@ -13,6 +13,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import java.lang.Exception
 import javax.inject.Inject
 
 class CsvFileSendUseCase
@@ -43,6 +44,8 @@ class CsvFileSendUseCase
 
         val channels = channelName.toRequestBody(MEDIA_TYPE_MULTI_PART.toMediaType())
 
+        var ok = true
+
         parameters.forEach {
 
             val file = MultipartBody.Part.createFormData(
@@ -53,9 +56,16 @@ class CsvFileSendUseCase
 
             val filename = it.name.toRequestBody(MEDIA_TYPE_MULTI_PART.toMediaType())
 
-            service.uploadCSVFiles(token, channels,file,filename)
+            val response = service.uploadCSVFiles(token, channels,file,filename)
+
+            ok = ok and response.ok
         }
 
-        emit(Result.Success(Unit))
+        if(ok){
+            emit(Result.Success(Unit))
+        }else{
+            emit(Result.Error(Exception("Sending files is failed")))
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package com.example.gnsspositionapp.usecase.send
 
+import com.example.gnsspositionapp.data.SlackApiResponse
 import okhttp3.*
 import retrofit2.http.*
 
@@ -10,5 +11,5 @@ interface SlackApiService {
         @Part("token") token : RequestBody,
         @Part("channels") channel : RequestBody,
         @Part file : MultipartBody.Part,
-        @Part("filename") filename : RequestBody) : ResponseBody
+        @Part("filename") filename : RequestBody) : SlackApiResponse
 }

@@ -1,12 +1,10 @@
 package com.example.gnsspositionapp.ui.measure
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.gnsspositionapp.data.Result
 import com.example.gnsspositionapp.data.data
+import com.example.gnsspositionapp.usecase.measure.CalculateAverageUseCase
 import com.example.gnsspositionapp.usecase.measure.FinishMeasureLocationUseCase
 import com.example.gnsspositionapp.usecase.measure.GetLocationCountUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,7 +16,8 @@ import timber.log.Timber
 class MeasureViewModel
     @ViewModelInject constructor(
         locationCountUseCase: GetLocationCountUseCase,
-        private val finishMeasuringUseCase : FinishMeasureLocationUseCase
+        private val finishMeasuringUseCase : FinishMeasureLocationUseCase,
+        calculateAverageUseCase: CalculateAverageUseCase
 ) : ViewModel() {
 
     val locationName = MutableLiveData("")
@@ -26,6 +25,10 @@ class MeasureViewModel
     @OptIn(ExperimentalCoroutinesApi::class)
     val tempLocationsCount = locationCountUseCase(Unit)
         .onStart { emit(Result.Success(0)) }
+        .map { it.data }
+        .asLiveData()
+
+    val average = calculateAverageUseCase(Unit)
         .map { it.data }
         .asLiveData()
 

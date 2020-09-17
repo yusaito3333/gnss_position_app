@@ -15,6 +15,7 @@
     <string name="edit_txt_file_title_hint">位置名称を入力してください</string>
     <string name="loading_txt">測定中です</string>
     <string name="tv_location_cnt">現在%1$d個取得しました</string>
+    <string name="tv_average">精度の平均: %1$.2f m</string>
     <string name="toolbar_measure_title">測定画面</string>
     <string name="btn_finish">測定終了</string>
     <string name="dialog_desc">測定を中止して開始画面に戻りますか?</string>
@@ -41,5 +42,6 @@
     <string name="btn_send">送信</string>
     <string name="btn_delete">削除</string>
     <string name="settings">設定</string>
+    <string name="snack_bar_share">2つ以上のファイルは共有できません</string>
 
 </resources>

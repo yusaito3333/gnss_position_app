@@ -2,7 +2,6 @@ package com.example.gnsspositionapp.ui.send
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +13,9 @@ import com.example.gnsspositionapp.R
 import com.example.gnsspositionapp.data.EventObserver
 import com.example.gnsspositionapp.databinding.FileSendFragmentBinding
 import com.example.gnsspositionapp.ui.showShortSnackBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 import java.io.File
-import java.util.*
 
 @AndroidEntryPoint
 class FileSendFragment : Fragment() ,OnItemSelected{
@@ -27,6 +25,12 @@ class FileSendFragment : Fragment() ,OnItemSelected{
     private lateinit var binding : FileSendFragmentBinding
 
     private lateinit var adapter: FileListAdapter
+
+    private var drawableIndex = 0
+
+    private val drawables = arrayOf(R.drawable.ic_baseline_send_24,
+                                    R.drawable.ic_baseline_delete_24,
+                                    R.drawable.ic_baseline_share_24)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,8 +48,24 @@ class FileSendFragment : Fragment() ,OnItemSelected{
                 viewModel.deleteCSVFiles()
             }
 
-            fabShare.setOnClickListener {
+            fabShare.setOnClickListener {fab ->
                 viewModel.shareCSVFiles()
+                /*fab.rotation = 0f
+                fab.animate()
+                    .rotationBy(180f)
+                    .setDuration(100)
+                    .scaleX(1.1f)
+                    .scaleY(1.1f)
+                    .withEndAction {
+                        (fab as FloatingActionButton).setImageResource(drawables[drawableIndex])
+                        fab.animate()
+                            .rotationBy(180f)
+                            .setDuration(100)
+                            .scaleX(1f)
+                            .scaleY(1f)
+                            .start()
+                        drawableIndex = (drawableIndex+1)%3
+                    }.start()*/
             }
         }
 
@@ -64,6 +84,10 @@ class FileSendFragment : Fragment() ,OnItemSelected{
 
         viewModel.sharedFile.observe(viewLifecycleOwner,EventObserver{
             share(it)
+        })
+
+        viewModel.selectedMoreThanOne.observe(viewLifecycleOwner,EventObserver{
+            showShortSnackBar(binding.root, requireContext(),R.string.snack_bar_share)
         })
 
     }

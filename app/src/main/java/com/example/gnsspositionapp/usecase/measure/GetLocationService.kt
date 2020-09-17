@@ -105,6 +105,7 @@ class GetLocationService : Service() {
     }
 
     fun requestLocationUpdates() {
+
         startService(Intent(applicationContext, GetLocationService::class.java))
 
         try{

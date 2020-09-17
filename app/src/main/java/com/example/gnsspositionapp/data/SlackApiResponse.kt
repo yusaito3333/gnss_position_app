@@ -1,5 +1,5 @@
 package com.example.gnsspositionapp.data
 
-data class SlackApiResponse(
-    val ok : String
+class SlackApiResponse (
+    val ok : Boolean
 )

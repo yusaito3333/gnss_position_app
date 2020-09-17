@@ -25,6 +25,11 @@ class LocationRepository
     @OptIn(FlowPreview::class)
     val locationCountChannel = _locationCountChannel.asFlow()
 
+    private val _locationChannel = BroadcastChannel<Location>(Channel.BUFFERED)
+
+    @OptIn(FlowPreview::class)
+    val locationChannel = _locationChannel.asFlow()
+
     private var getLocationCount = 0
 
     val locationInfoList = mutableListOf<LocationInfo>()
@@ -39,7 +44,7 @@ class LocationRepository
         getLocationCount += 1
 
         _locationCountChannel.send(getLocationCount)
-
+        _locationChannel.send(location)
 
         //minAccuracyLocation がnullなら Float.MAX_VALUEとみなす
         if(minAccuracyLocation?.accuracy ?: Float.MAX_VALUE > location.accuracy){
@@ -72,9 +77,10 @@ class LocationRepository
         }
     }
 
-    fun clearLocations() {
+    suspend fun clearLocations() {
         getLocationCount = 0
         minAccuracyLocation = null
+        _locationCountChannel.send(0)
     }
 
 }

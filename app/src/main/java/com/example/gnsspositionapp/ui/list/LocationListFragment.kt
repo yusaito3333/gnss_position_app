@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.gnsspositionapp.R
@@ -26,7 +25,7 @@ class LocationListFragment : Fragment() {
 
     private lateinit var adapter : LocationListAdapter
 
-    private val locationListViewModel : LocationListViewModel by viewModels()
+    private val locationListViewModel : LocationListViewModel by activityViewModels()
 
     private val serviceEventViewModel : ServiceEventViewModel by activityViewModels()
 

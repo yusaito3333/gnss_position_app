@@ -7,13 +7,11 @@ import android.view.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
-import com.example.gnsspositionapp.ServiceEventViewModel
 import com.example.gnsspositionapp.R
+import com.example.gnsspositionapp.ServiceEventViewModel
 import kotlinx.android.synthetic.main.start_fragment.*
-import timber.log.Timber
 
 class StartFragment : Fragment() {
 

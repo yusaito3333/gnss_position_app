@@ -7,6 +7,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 import org.junit.Assert.*
+import kotlin.system.measureTimeMillis
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -20,23 +21,27 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() = runBlocking {
 
-        val tree = BKTree()
+        val time = measureTimeMillis {
+            val tree = BKTree()
 
-        val job = launch(Dispatchers.Default) {
-            data.forEach { tree.add(BKTree.Node(it, mutableMapOf())) }
+            val job = launch(Dispatchers.Default) {
+                data.forEach { tree.add(BKTree.Node(it, mutableMapOf())) }
+            }
+
+            job.join()
+
+            val searchList = tree.search(2,"sort")
+
+            println(searchList)
+            assert(searchList.contains("soft"))
+            assert(searchList.contains("some"))
+            assert(searchList.contains("soda"))
+            assert(!searchList.contains("same"))
+            assert(!searchList.contains("mole"))
+            assert(!searchList.contains("salmon"))
         }
-
-        job.join()
-
-        val searchList = tree.search(2,"sort")
-
-        println(searchList)
-        assert(searchList.contains("soft"))
-        assert(searchList.contains("some"))
-        assert(searchList.contains("soda"))
-        assert(!searchList.contains("same"))
-        assert(!searchList.contains("mole"))
-        assert(!searchList.contains("salmon"))
+        println(time)
+        Unit
     }
 
     @Test

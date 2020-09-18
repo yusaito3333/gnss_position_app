@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -13,7 +12,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.gnsspositionapp.ServiceEventViewModel
 import com.example.gnsspositionapp.R
-import com.example.gnsspositionapp.adapter.AutoCompleteAdapter
 import com.example.gnsspositionapp.databinding.MeasureMeasuringLayoutBinding
 import dagger.hilt.android.AndroidEntryPoint
 

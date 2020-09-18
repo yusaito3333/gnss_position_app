@@ -4,14 +4,33 @@ import android.content.Context
 import android.widget.ArrayAdapter
 import android.widget.Filter
 import androidx.annotation.WorkerThread
-import java.util.regex.Pattern
+import timber.log.Timber
+import java.util.*
 import javax.inject.Singleton
+import kotlin.collections.ArrayDeque
 import kotlin.math.min
 
-class AutoCompleteAdapter(context : Context, resource : Int,private val objects : List<String>)
+class AutoCompleteAdapter(context : Context,
+                          resource : Int,
+                          objects : List<String>,
+                          private val tree : BKTree)
     : ArrayAdapter<String>(context,resource,objects) {
 
+    var suggest = listOf<String>()
+
+    companion object {
+        private const val RADIUS = 2
+    }
+
     private lateinit var filter : CustomFilter
+
+    override fun getCount(): Int {
+        return suggest.size
+    }
+
+    override fun getItem(position: Int): String? {
+        return suggest[position]
+    }
 
     override fun getFilter(): Filter {
         if(!::filter.isInitialized){
@@ -23,26 +42,15 @@ class AutoCompleteAdapter(context : Context, resource : Int,private val objects 
 
     inner class CustomFilter : Filter(){
 
-        private val pattern = Pattern.compile("c([bkcrfsl23]).*")
-
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             val result = FilterResults()
-
+            Timber.d("$constraint")
             if(constraint != null){
-                val m = pattern.matcher(constraint.toString())
 
-                val list = arrayListOf<String>()
-                if(m.find()){
-                    val match = constraint.subSequence(m.start(),m.end()).toString()
-                    for (s in objects){
-                        if(s.startsWith(match)){
-                            list.add(s)
-                        }
-                    }
-                }
+                suggest = tree.search(RADIUS, constraint.toString().toLowerCase(Locale.ROOT))
 
-                result.count = list.size
-                result.values = list
+                result.count = suggest.size
+                result.values = suggest
             }
 
             return result
@@ -110,6 +118,8 @@ class BKTree {
             }.forEach { candidate.addLast(it.value) }
             
         }
+
+        Timber.d("$result")
 
         return result
     }

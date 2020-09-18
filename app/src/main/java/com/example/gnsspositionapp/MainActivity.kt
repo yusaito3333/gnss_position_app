@@ -6,25 +6,18 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.onNavDestinationSelected
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.gnsspositionapp.data.EventObserver
 import com.example.gnsspositionapp.databinding.ActivityMainBinding
 import com.example.gnsspositionapp.ui.measure.OnBackPressHandler
-import com.example.gnsspositionapp.ui.showIndefiniteSnackBar
-import com.example.gnsspositionapp.ui.showShortSnackBar
 import com.example.gnsspositionapp.usecase.measure.GetLocationService
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -36,6 +29,8 @@ class MainActivity : AppCompatActivity() {
     private val serviceEventViewModel : ServiceEventViewModel by viewModels()
 
     private var mService : GetLocationService? = null
+
+    private lateinit var appBarConf : AppBarConfiguration
 
     private val mServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(componentName: ComponentName?, iBinder: IBinder?) {
@@ -89,9 +84,9 @@ class MainActivity : AppCompatActivity() {
 
         val navController = navHostFragment.navController
 
-        val appBarConf = AppBarConfiguration(setOf(R.id.measure_fragment,R.id.start_fragment))
+        appBarConf = AppBarConfiguration(setOf(R.id.measure_fragment,R.id.start_fragment))
 
-        binding.toolbar.setupWithNavController(navController,appBarConf)
+        setupActionBarWithNavController(navController,appBarConf)
 
     }
 
@@ -108,5 +103,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
         super.onBackPressed()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController(R.id.nav_host_fragment_container).navigateUp(appBarConf)
     }
 }
